@@ -1,6 +1,6 @@
 #!groovy
 
-@Library('fedora-pipeline-library@distgit') _
+@Library('fedora-pipeline-library@pull-requests') _
 
 import groovy.json.JsonBuilder
 
