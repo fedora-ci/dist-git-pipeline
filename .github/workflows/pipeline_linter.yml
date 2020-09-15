@@ -23,9 +23,10 @@ jobs:
       # Runs check for all the Jenkins files
       - name: Check JenkinsfileScratchBuildTrigger file
         run: |
-          echo ${{ secrets.NOT_A_SECRET }}
           bash ./tests/pipeline_linter.sh -t ${{ secrets.OSCI_JENKINS_2_FEDORAPROJECT }} -f JenkinsfileScratchBuildTrigger
+        working-directory: ./
 
       - name: Check Jenkinsfile file
         run: |
           bash ./tests/pipeline_linter.sh -t ${{ secrets.OSCI_JENKINS_2_FEDORAPROJECT }} -f Jenkinsfile
+        working-directory: ./
