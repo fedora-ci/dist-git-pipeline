@@ -11,7 +11,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-31",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -26,7 +26,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-32",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -41,7 +41,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-33",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -56,7 +56,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-34",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -71,7 +71,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-35",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -86,7 +86,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-36",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -101,7 +101,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-37",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         },
@@ -116,7 +116,7 @@
                 "fedora-dist-git": {
                     "distro": "fedora-38",
                     "arch": "x86_64",
-                    "trigger": "code"
+                    "trigger": "commit"
                 }
             }
         }
