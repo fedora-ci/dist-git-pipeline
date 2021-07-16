@@ -46,7 +46,7 @@ pipeline {
     agent none
 
     libraries {
-        lib("fedora-pipeline-library@46e88d3789f6f12a11296b28362221749be481eb")
+        lib("fedora-pipeline-library@24438110fdfe7700e3217c94be3b3c41d6f424a3")
     }
 
     options {
@@ -197,7 +197,7 @@ pipeline {
             }
         }
         success {
-            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: xunit, dryRun: isPullRequest())
+            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: xunit, ciConfig: repoTests['ciConfig'], dryRun: isPullRequest())
         }
         failure {
             sendMessage(type: 'error', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
