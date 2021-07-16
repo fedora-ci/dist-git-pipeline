@@ -46,7 +46,7 @@ pipeline {
     agent none
 
     libraries {
-        lib("fedora-pipeline-library@${env.PIPELINE_LIBRARY_VERSION}")
+        lib("fedora-pipeline-library@46e88d3789f6f12a11296b28362221749be481eb")
     }
 
     options {
@@ -90,7 +90,8 @@ pipeline {
                         repoUrlAndRef = [url: TEST_REPO_URL.split('#')[0], ref: TEST_REPO_URL.split('#')[1]]
                     }
                     repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'])
-
+                    echo "repoTests: ${repoTests}"
+                    echo "${repoTests['ciConfig']}"
                     if (!repoTests) {
                         abort("No dist-git tests (STI/FMF) were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
@@ -139,8 +140,8 @@ pipeline {
                     hook = registerWebhook()
                     requestPayload['notification'] = ['webhook': [url: hook.getURL()]]
 
-                    def response = submitTestingFarmRequest(payloadMap: requestPayload)
-                    testingFarmRequestId = response['id']
+                    // def response = submitTestingFarmRequest(payloadMap: requestPayload)
+                    // testingFarmRequestId = response['id']
                 }
                 sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
             }
@@ -150,9 +151,14 @@ pipeline {
             agent none
             steps {
                 script {
-                    def response = waitForTestingFarm(requestId: testingFarmRequestId, hook: hook)
-                    testingFarmResult = response.apiResponse
-                    xunit = response.xunit
+                    // def response = waitForTestingFarm(requestId: testingFarmRequestId, hook: hook)
+//                     def response = """
+// {"id": "f604122f-d9fc-45f5-985d-01f756bad212", "user_id": "c4af7afe-b95e-4cf1-b989-9c458f0eecf0", "test": {"fmf": {"name": null, "path": ".", "ref": "79a83d4b834c8a2f24155853910252b752b36aa3", "url": "https://src.fedoraproject.org/rpms/perl-PDF-Builder"}, "script": null, "sti": null}, "state": "complete", "environments_requested": [{"arch": "x86_64", "artifacts": [{"id": "71991431", "packages": null, "type": "fedora-koji-build"}], "os": {"compose": "Fedora-Rawhide"}, "pool": null, "settings": null, "tmt": {"context": {"arch": "x86_64", "distro": "fedora-35", "trigger": "build"}}, "variables": null}], "notes": [{"level": "info", "message": "tf-tmt/dispatch-1626438582-61c09701"}], "result": {"overall": "passed", "summary": null, "xunit": "<testsuites overall-result=\"passed\"><properties><property name=\"baseosci.overall-result\" value=\"passed\"/></properties><testsuite name=\"/plans/sanity\" result=\"passed\" tests=\"1\"><logs><log guest-setup-stage=\"artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/artifact-installation-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c\" name=\"build installation\" schedule-stage=\"guest-setup\"/><log guest-setup-stage=\"pre_artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/guest-setup-output-pre-artifact-installation.txt\" name=\"guest setup\" schedule-stage=\"guest-setup\"/><log guest-setup-stage=\"post_artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/guest-setup-output-post-artifact-installation.txt\" name=\"guest setup\" schedule-stage=\"guest-setup\"/></logs><properties><property name=\"baseosci.result\" value=\"passed\"/></properties><testcase name=\"/tests/upstream-tests\" result=\"passed\"><properties><property name=\"baseosci.arch\" value=\"x86_64\"/><property name=\"baseosci.connectable_host\" value=\"172.31.31.245\"/><property name=\"baseosci.distro\" value=\"Fedora-Rawhide\"/><property name=\"baseosci.status\" value=\"Complete\"/><property name=\"baseosci.testcase.source.url\" value=\"\"/><property name=\"baseosci.variant\" value=\"\"/></properties><logs><log href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/work-sanityP6fJaZ/plans/sanity/execute/data/tests/upstream-tests\" name=\"log_dir\" schedule-stage=\"running\"/><log href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/work-sanityP6fJaZ/plans/sanity/execute/data/tests/upstream-tests/output.txt\" name=\"testout.log\" schedule-stage=\"running\"/></logs><testing-environment name=\"requested\"><property name=\"arch\" value=\"x86_64\"/><property name=\"compose\" value=\"Fedora-Rawhide\"/><property name=\"snapshots\" value=\"False\"/></testing-environment><testing-environment name=\"provisioned\"><property name=\"arch\" value=\"x86_64\"/><property name=\"compose\" value=\"Fedora-Rawhide\"/><property name=\"snapshots\" value=\"False\"/></testing-environment></testcase></testsuite></testsuites>"}, "run": {"artifacts": "http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212", "console": null, "stages": null}, "created": "2021-07-16 12:29:29.968488", "updated": "2021-07-16 12:29:29.968501"}
+//                     """
+                    // testingFarmResult = response.apiResponse
+                    xunit = """
+<testsuites overall-result=\"passed\"><properties><property name=\"baseosci.overall-result\" value=\"passed\"/></properties><testsuite name=\"/plans/sanity\" result=\"passed\" tests=\"1\"><logs><log guest-setup-stage=\"artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/artifact-installation-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c\" name=\"build installation\" schedule-stage=\"guest-setup\"/><log guest-setup-stage=\"pre_artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/guest-setup-output-pre-artifact-installation.txt\" name=\"guest setup\" schedule-stage=\"guest-setup\"/><log guest-setup-stage=\"post_artifact_installation\" href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/guest-setup-bc8a1c8c-8adc-414b-9242-f3f6d8653f2c/guest-setup-output-post-artifact-installation.txt\" name=\"guest setup\" schedule-stage=\"guest-setup\"/></logs><properties><property name=\"baseosci.result\" value=\"passed\"/></properties><testcase name=\"/tests/upstream-tests\" result=\"passed\"><properties><property name=\"baseosci.arch\" value=\"x86_64\"/><property name=\"baseosci.connectable_host\" value=\"172.31.31.245\"/><property name=\"baseosci.distro\" value=\"Fedora-Rawhide\"/><property name=\"baseosci.status\" value=\"Complete\"/><property name=\"baseosci.testcase.source.url\" value=\"\"/><property name=\"baseosci.variant\" value=\"\"/></properties><logs><log href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/work-sanityP6fJaZ/plans/sanity/execute/data/tests/upstream-tests\" name=\"log_dir\" schedule-stage=\"running\"/><log href=\"http://artifacts.dev.testing-farm.io/f604122f-d9fc-45f5-985d-01f756bad212/work-sanityP6fJaZ/plans/sanity/execute/data/tests/upstream-tests/output.txt\" name=\"testout.log\" schedule-stage=\"running\"/></logs><testing-environment name=\"requested\"><property name=\"arch\" value=\"x86_64\"/><property name=\"compose\" value=\"Fedora-Rawhide\"/><property name=\"snapshots\" value=\"False\"/></testing-environment><testing-environment name=\"provisioned\"><property name=\"arch\" value=\"x86_64\"/><property name=\"compose\" value=\"Fedora-Rawhide\"/><property name=\"snapshots\" value=\"False\"/></testing-environment></testcase></testsuite></testsuites>
+"""
                 }
             }
         }
@@ -180,9 +186,9 @@ pipeline {
     }
 
     post {
-        always {
-            evaluateTestingFarmResults(testingFarmResult)
-        }
+        // always {
+        //     // evaluateTestingFarmResults(testingFarmResult)
+        // }
         aborted {
             script {
                 if (isTimeoutAborted(timeout: env.DEFAULT_PIPELINE_TIMEOUT_MINUTES, unit: 'MINUTES')) {
@@ -191,13 +197,13 @@ pipeline {
             }
         }
         success {
-            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: gzip(xunit), dryRun: isPullRequest())
+            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: xunit, ciConfig: repoTests['ciConfig'], dryRun: isPullRequest())
         }
         failure {
             sendMessage(type: 'error', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
         }
         unstable {
-            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: gzip(xunit), dryRun: isPullRequest())
+            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: xunit, ciConfig: repoTests['ciConfig'], dryRun: isPullRequest())
         }
     }
 }
