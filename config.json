@@ -61,7 +61,7 @@
             }
         },
         "f35": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-35",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-35",
