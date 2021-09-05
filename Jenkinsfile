@@ -30,6 +30,8 @@ def hook
 def repoUrlAndRef
 def repoTests
 
+def reportSeparately = false
+
 def podYAML = """
 spec:
   containers:
@@ -46,7 +48,7 @@ pipeline {
     agent none
 
     libraries {
-        lib("fedora-pipeline-library@${env.PIPELINE_LIBRARY_VERSION}")
+        lib("fedora-pipeline-library@466121d984baf7077c6aa602c4c33ccfecb1fccf")
     }
 
     options {
@@ -94,8 +96,14 @@ pipeline {
                     if (!repoTests) {
                         abort("No dist-git tests (STI/FMF) were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
+                    reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
                 }
-                sendMessage(type: 'queued', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
+                sendMessage(
+                    type: 'queued',
+                    artifactId: artifactId,
+                    pipelineMetadata: pipelineMetadata,
+                    dryRun: isPullRequest()
+                )
             }
         }
 
@@ -142,7 +150,12 @@ pipeline {
                     def response = submitTestingFarmRequest(payloadMap: requestPayload)
                     testingFarmRequestId = response['id']
                 }
-                sendMessage(type: 'running', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
+                sendMessage(
+                    type: 'running',
+                    artifactId: artifactId,
+                    pipelineMetadata: pipelineMetadata,
+                    dryRun: isPullRequest()
+                )
             }
         }
 
@@ -186,18 +199,61 @@ pipeline {
         aborted {
             script {
                 if (isTimeoutAborted(timeout: env.DEFAULT_PIPELINE_TIMEOUT_MINUTES, unit: 'MINUTES')) {
-                    sendMessage(type: 'error', artifactId: artifactId, errorReason: 'Timeout has been exceeded, pipeline aborted.', pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
+                    sendMessage(
+                        type: 'error',
+                        artifactId: artifactId,
+                        errorReason: 'Timeout has been exceeded, pipeline aborted.',
+                        pipelineMetadata: pipelineMetadata,
+                        dryRun: isPullRequest()
+                    )
                 }
             }
         }
         success {
-            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: gzip(xunit), dryRun: isPullRequest())
+            script {
+                def results = ["${pipelineMetadata.testType}": 'passed']
+                if (xunit && reportSeparately) {
+                    results += xunitResults2map(xunit: xunit)
+                }
+                results.each { testType, result ->
+                    sendMessage(
+                        type: 'complete',
+                        artifactId: artifactId,
+                        pipelineMetadata: pipelineMetadata,
+                        xunit: gzip(xunit),
+                        dryRun: isPullRequest(),
+                        testType: testType,
+                        testResult: result
+                    )
+                }
+            }
         }
         failure {
-            sendMessage(type: 'error', artifactId: artifactId, pipelineMetadata: pipelineMetadata, dryRun: isPullRequest())
+            sendMessage(
+                type: 'error',
+                artifactId: artifactId,
+                pipelineMetadata: pipelineMetadata,
+                dryRun: isPullRequest()
+            )
         }
         unstable {
-            sendMessage(type: 'complete', artifactId: artifactId, pipelineMetadata: pipelineMetadata, xunit: gzip(xunit), dryRun: isPullRequest())
+            script {
+                def results = ["${pipelineMetadata.testType}": 'needs_inspection']
+                if (xunit && reportSeparately) {
+                    results += xunitResults2map(xunit: xunit)
+                }
+                results.each { testType, result ->
+                    sendMessage(
+                        type: 'complete',
+                        artifactId: artifactId,
+                        pipelineMetadata: pipelineMetadata,
+                        xunit: gzip(xunit),
+                        dryRun: isPullRequest(),
+                        testType: testType,
+                        testResult: result
+                    )
+                }
+            }
         }
     }
 }
