@@ -102,6 +102,8 @@ pipeline {
                     if (!testPlan) {
                         // it doesn't make sense to report results separately if we are running only one test plan
                         reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
+                    } else {
+                        pipelineMetadata['testType'] = testPlan
                     }
                     if (reportSeparately && repoTests['type'] == 'fmf') {
                         // we want to report results separately, so we will just run this job for each test plan individually
@@ -237,21 +239,13 @@ pipeline {
         }
         success {
             script {
-                def results = ["${pipelineMetadata.testType}": 'passed']
-                if (xunit && reportSeparately) {
-                    results += xunitResults2map(xunit: xunit)
-                }
-                results.each { testType, result ->
-                    sendMessage(
-                        type: 'complete',
-                        artifactId: artifactId,
-                        pipelineMetadata: pipelineMetadata,
-                        xunit: gzip(xunit),
-                        dryRun: isPullRequest(),
-                        testType: testType,
-                        testResult: result
-                    )
-                }
+                sendMessage(
+                    type: 'complete',
+                    artifactId: artifactId,
+                    pipelineMetadata: pipelineMetadata,
+                    xunit: gzip(xunit),
+                    dryRun: isPullRequest()
+                )
             }
         }
         failure {
@@ -264,21 +258,13 @@ pipeline {
         }
         unstable {
             script {
-                def results = ["${pipelineMetadata.testType}": 'needs_inspection']
-                if (xunit && reportSeparately) {
-                    results += xunitResults2map(xunit: xunit)
-                }
-                results.each { testType, result ->
-                    sendMessage(
-                        type: 'complete',
-                        artifactId: artifactId,
-                        pipelineMetadata: pipelineMetadata,
-                        xunit: gzip(xunit),
-                        dryRun: isPullRequest(),
-                        testType: testType,
-                        testResult: result
-                    )
-                }
+                sendMessage(
+                    type: 'complete',
+                    artifactId: artifactId,
+                    pipelineMetadata: pipelineMetadata,
+                    xunit: gzip(xunit),
+                    dryRun: isPullRequest()
+                )
             }
         }
     }
