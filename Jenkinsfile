@@ -49,7 +49,7 @@ pipeline {
     agent none
 
     libraries {
-        lib("fedora-pipeline-library@466121d984baf7077c6aa602c4c33ccfecb1fccf")
+        lib("fedora-pipeline-library@tmt-plans")
     }
 
     options {
@@ -102,6 +102,23 @@ pipeline {
                     if (!testPlan) {
                         // it doesn't make sense to report results separately if we are running only one test plan
                         reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
+                    }
+                    if (reportSeparately && repoTests['type'] == 'fmf') {
+                        // we want to report results separately, so we will just run this job for each test plan individually
+                        repoTests['plans'].each { plan ->
+                            build(
+                                job: "fedora-ci/dist-git-pipeline/master",
+                                wait: false,
+                                parameters: [
+                                    string(name: 'ARTIFACT_ID', value: params.ARTIFACT_ID),
+                                    string(name: 'ADDITIONAL_ARTIFACT_IDS', value: params.ADDITIONAL_ARTIFACT_IDS),
+                                    string(name: 'TEST_PROFILE', value: params.TEST_PROFILE),
+                                    string(name: 'TEST_REPO_URL', value: params.TEST_REPO_URL),
+                                    string(name: 'TEST_PLAN', value: plan),
+                                ]
+                            )
+                        }
+                        abort("Separate tasks were scheduled for all test plans.")
                     }
                 }
                 sendMessage(
