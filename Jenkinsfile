@@ -29,6 +29,7 @@ def hook
 
 def repoUrlAndRef
 def repoTests
+def testPlan
 
 def reportSeparately = false
 
@@ -62,6 +63,7 @@ pipeline {
         string(name: 'ADDITIONAL_ARTIFACT_IDS', defaultValue: '', trim: true, description: 'A comma-separated list of additional ARTIFACT_IDs')
         string(name: 'TEST_PROFILE', defaultValue: env.FEDORA_CI_RAWHIDE_RELEASE_ID, trim: true, description: "A name of the test profile to use; Example: ${env.FEDORA_CI_RAWHIDE_RELEASE_ID}")
         string(name: 'TEST_REPO_URL', defaultValue: '', trim: true, description: '(optional) URL to the repository containing tests; followed by "#&lt;ref&gt;", where &lt;ref&gt; is a commit hash; Example: https://src.fedoraproject.org/tests/selinux#ff0784e36758f2fdce3201d907855b0dd74064f9')
+        string(name: 'TEST_PLAN', defaultValue: '', trim: true, description: '(optional) name of the test plan to run; Example: /plans/regression')
     }
 
     environment {
@@ -78,6 +80,7 @@ pipeline {
                     artifactId = params.ARTIFACT_ID
                     additionalArtifactIds = params.ADDITIONAL_ARTIFACT_IDS
                     setBuildNameFromArtifactId(artifactId: artifactId, profile: params.TEST_PROFILE)
+                    testPlan = params.TEST_PLAN
 
                     checkout scm
                     config = loadConfig(profile: params.TEST_PROFILE)
@@ -96,7 +99,10 @@ pipeline {
                     if (!repoTests) {
                         abort("No dist-git tests (STI/FMF) were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
-                    reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
+                    if (!testPlan) {
+                        // it doesn't make sense to report results separately if we are running only one test plan
+                        reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
+                    }
                 }
                 sendMessage(
                     type: 'queued',
@@ -142,6 +148,9 @@ pipeline {
                         requestPayload['environments'][0]['tmt'] = [
                             context: config.tmt_context[getTargetArtifactType(artifactId)]
                         ]
+                        if (testPlan) {
+                            requestPayload['test']['fmf']['name'] = testPlan
+                        }
                     }
 
                     hook = registerWebhook()
