@@ -26,6 +26,7 @@ def testingFarmResult
 def xunit
 def config
 def hook
+def runUrl
 
 def repoUrlAndRef
 def repoTests
@@ -194,6 +195,11 @@ pipeline {
                     def response = waitForTestingFarm(requestId: testingFarmRequestId, hook: hook)
                     testingFarmResult = response.apiResponse
                     xunit = response.xunit
+
+                    // Log URL will point to the artifacts storage, for pull requests.
+                    if (getTargetArtifactType(artifactId) == 'fedora-dist-git') {
+                        runUrl = "${FEDORA_CI_TESTING_FARM_ARTIFACTS_URL}/${testingFarmRequestId}"
+                    }
                 }
             }
         }
@@ -244,6 +250,7 @@ pipeline {
                     artifactId: artifactId,
                     pipelineMetadata: pipelineMetadata,
                     xunit: gzip(xunit),
+                    runUrl: runUrl,
                     dryRun: isPullRequest()
                 )
             }
@@ -263,6 +270,7 @@ pipeline {
                     artifactId: artifactId,
                     pipelineMetadata: pipelineMetadata,
                     xunit: gzip(xunit),
+                    runUrl: runUrl,
                     dryRun: isPullRequest()
                 )
             }
