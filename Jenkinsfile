@@ -110,7 +110,7 @@ pipeline {
                         // we want to report results separately, so we will just run this job for each test plan individually
                         repoTests['plans'].each { plan ->
                             build(
-                                job: "fedora-ci/dist-git-pipeline/master",
+                                job: "${JOB_NAME}",
                                 wait: false,
                                 parameters: [
                                     string(name: 'ARTIFACT_ID', value: params.ARTIFACT_ID),
