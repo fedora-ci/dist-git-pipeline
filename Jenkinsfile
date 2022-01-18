@@ -98,7 +98,7 @@ pipeline {
                     repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'])
 
                     if (!repoTests) {
-                        abort("No dist-git tests (STI/FMF) were found in the repository ${repoUrlAndRef[0]}, skipping...")
+                        abort("No dist-git tests (STI/TMT) were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
                     if (!testPlan) {
                         // it doesn't make sense to report results separately if we are running only one test plan
