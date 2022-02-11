@@ -76,7 +76,7 @@
             }
         },
         "f36": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-36",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-36",
