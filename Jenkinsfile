@@ -23,7 +23,6 @@ def artifactId
 def additionalArtifactIds
 def testingFarmRequestId
 def testingFarmResult
-def xunit
 def config
 def hook
 def runUrl
@@ -184,7 +183,6 @@ pipeline {
                 script {
                     def response = waitForTestingFarm(requestId: testingFarmRequestId, hook: hook)
                     testingFarmResult = response.apiResponse
-                    xunit = response.xunit
 
                     runUrl = "${FEDORA_CI_TESTING_FARM_ARTIFACTS_URL}/${testingFarmRequestId}"
                 }
@@ -215,7 +213,6 @@ pipeline {
                     type: 'complete',
                     artifactId: artifactId,
                     pipelineMetadata: pipelineMetadata,
-                    xunit: gzip(xunit),
                     runUrl: runUrl,
                     dryRun: isPullRequest()
                 )
@@ -235,7 +232,6 @@ pipeline {
                     type: 'complete',
                     artifactId: artifactId,
                     pipelineMetadata: pipelineMetadata,
-                    xunit: gzip(xunit),
                     runUrl: runUrl,
                     dryRun: isPullRequest()
                 )
