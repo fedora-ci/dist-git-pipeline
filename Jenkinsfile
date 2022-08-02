@@ -34,16 +34,6 @@ def testPlan
 
 def reportSeparately = false
 
-def podYAML = """
-spec:
-  containers:
-  - name: pipeline-agent
-    # source: https://github.com/fedora-ci/jenkins-pipeline-library-agent-image
-    image: quay.io/fedoraci/pipeline-library-agent:63d8634
-    tty: true
-    alwaysPullImage: true
-"""
-
 
 pipeline {
 
@@ -196,31 +186,7 @@ pipeline {
                     testingFarmResult = response.apiResponse
                     xunit = response.xunit
 
-                    // Log URL will point to the artifacts storage, for pull requests.
-                    if (getTargetArtifactType(artifactId) == 'fedora-dist-git') {
-                        runUrl = "${FEDORA_CI_TESTING_FARM_ARTIFACTS_URL}/${testingFarmRequestId}"
-                    }
-                }
-            }
-        }
-
-        stage('Process Test Results (XUnit)') {
-            when {
-                beforeAgent true
-                expression { xunit }
-            }
-            agent {
-                kubernetes {
-                    yaml podYAML
-                    defaultContainer 'pipeline-agent'
-                }
-            }
-            steps {
-                script {
-                    // Convert Testing Farm XUnit into JUnit and store the result in Jenkins
-                    writeFile file: 'tfxunit.xml', text: "${xunit}"
-                    sh script: "tfxunit2junit --docs-url ${pipelineMetadata['docs']} tfxunit.xml > xunit.xml"
-                    junit(allowEmptyResults: true, keepLongStdio: true, testResults: 'xunit.xml')
+                    runUrl = "${FEDORA_CI_TESTING_FARM_ARTIFACTS_URL}/${testingFarmRequestId}"
                 }
             }
         }
