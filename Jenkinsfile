@@ -39,7 +39,7 @@ pipeline {
     agent none
 
     libraries {
-        lib("fedora-pipeline-library@tmt-plans")
+        lib("fedora-pipeline-library@${env.PIPELINE_LIBRARY_VERSION}")
     }
 
     options {
