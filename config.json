@@ -91,7 +91,7 @@
             }
         },
         "f37": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-37",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-37",
