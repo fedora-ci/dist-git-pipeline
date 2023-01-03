@@ -109,12 +109,12 @@
             "compose": "Fedora-Rawhide",
             "tmt_context": {
                 "koji-build": {
-                    "distro": "fedora-38",
+                    "distro": "fedora-rawhide",
                     "arch": "x86_64",
                     "trigger": "build"
                 },
                 "fedora-dist-git": {
-                    "distro": "fedora-38",
+                    "distro": "fedora-rawhide",
                     "arch": "x86_64",
                     "trigger": "commit"
                 }
