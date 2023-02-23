@@ -141,6 +141,9 @@ pipeline {
                         environments: [
                             [
                                 arch: "x86_64",
+                                variables: [
+                                    KOJI_TASK_ID: "${getIdFromArtifactId(artifactId: artifactId)}"
+                                ],
                                 os: [ compose: "${config.compose}" ],
                                 artifacts: artifacts
                             ]
