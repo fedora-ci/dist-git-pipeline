@@ -84,7 +84,7 @@ pipeline {
                     } else {
                         repoUrlAndRef = [url: TEST_REPO_URL.split('#')[0], ref: TEST_REPO_URL.split('#')[1]]
                     }
-                    repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'])
+                    repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'], context: config.tmt_context[getTargetArtifactType(artifactId)])
 
                     if (!repoTests) {
                         abort("No dist-git tests (STI/TMT) were found in the repository ${repoUrlAndRef[0]}, skipping...")
