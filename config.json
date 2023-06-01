@@ -134,6 +134,81 @@
                     "trigger": "commit"
                 }
             }
+        },
+        "epel7": {
+            "compose": "CentOS-7",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-7",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-7",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "epel8": {
+            "compose": "CentOS-Stream-8",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-stream-8",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-stream-8",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "epel8-next": {
+            "compose": "CentOS-Stream-8",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-stream-8",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-stream-8",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "epel9": {
+            "compose": "CentOS-Stream-9",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-stream-9",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-stream-9",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "epel9-next": {
+            "compose": "CentOS-Stream-9",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-stream-9",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-stream-9",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
         }
     }
 }
