@@ -124,6 +124,51 @@
             "compose": "Fedora-Rawhide",
             "tmt_context": {
                 "koji-build": {
+                    "distro": "fedora-39",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-39",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "f40": {
+            "compose": "Fedora-Rawhide",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "f41": {
+            "compose": "Fedora-Rawhide",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "build"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "commit"
+                }
+            }
+        },
+        "f42": {
+            "compose": "Fedora-Rawhide",
+            "tmt_context": {
+                "koji-build": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
                     "trigger": "build"
