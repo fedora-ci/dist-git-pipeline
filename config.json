@@ -121,7 +121,7 @@
             }
         },
         "f39": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-39",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-39",
