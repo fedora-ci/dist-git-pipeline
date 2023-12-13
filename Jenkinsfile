@@ -113,12 +113,12 @@ pipeline {
                         abort("Separate tasks were scheduled for all test plans.")
                     }
                 }
-                // sendMessage(
-                //     type: 'queued',
-                //     artifactId: artifactId,
-                //     pipelineMetadata: pipelineMetadata,
-                //     dryRun: isPullRequest()
-                // )
+                sendMessage(
+                    type: 'queued',
+                    artifactId: artifactId,
+                    pipelineMetadata: pipelineMetadata,
+                    dryRun: isPullRequest()
+                )
             }
         }
 
