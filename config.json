@@ -136,15 +136,15 @@
             }
         },
         "f40": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-40",
             "tmt_context": {
                 "koji-build": {
-                    "distro": "fedora-rawhide",
+                    "distro": "fedora-40",
                     "arch": "x86_64",
                     "trigger": "build"
                 },
                 "fedora-dist-git": {
-                    "distro": "fedora-rawhide",
+                    "distro": "fedora-40",
                     "arch": "x86_64",
                     "trigger": "commit"
                 }
