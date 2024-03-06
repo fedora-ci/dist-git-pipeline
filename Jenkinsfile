@@ -128,10 +128,15 @@ pipeline {
             }
             steps {
                 script {
+                    def mainArtifactTaskId = getIdFromArtifactId(artifactId: artifactId)
                     def artifacts = []
                     getIdFromArtifactId(artifactId: artifactId, additionalArtifactIds: additionalArtifactIds).split(',').each { taskId ->
+                        def install = false
                         if (taskId) {
-                            artifacts.add([id: "${taskId}", type: "fedora-koji-build"])
+                            if (taskId == mainArtifactTaskId) {
+                                install = true
+                            }
+                            artifacts.add([id: "${taskId}", type: "fedora-koji-build", install: install])
                         }
                     }
 
