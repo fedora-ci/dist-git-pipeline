@@ -6,12 +6,14 @@
                 "koji-build": {
                     "distro": "fedora-31",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-31",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -21,12 +23,14 @@
                 "koji-build": {
                     "distro": "fedora-32",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-32",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -36,12 +40,14 @@
                 "koji-build": {
                     "distro": "fedora-33",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-33",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -51,12 +57,14 @@
                 "koji-build": {
                     "distro": "fedora-34",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-34",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -66,12 +74,14 @@
                 "koji-build": {
                     "distro": "fedora-35",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-35",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -81,12 +91,14 @@
                 "koji-build": {
                     "distro": "fedora-36",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-36",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -96,12 +108,14 @@
                 "koji-build": {
                     "distro": "fedora-37",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-37",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -111,12 +125,14 @@
                 "koji-build": {
                     "distro": "fedora-38",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-38",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -126,12 +142,14 @@
                 "koji-build": {
                     "distro": "fedora-39",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-39",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -141,12 +159,14 @@
                 "koji-build": {
                     "distro": "fedora-40",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-40",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -156,12 +176,14 @@
                 "koji-build": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -171,12 +193,14 @@
                 "koji-build": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -186,12 +210,14 @@
                 "koji-build": {
                     "distro": "centos-7",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "centos-7",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -201,12 +227,14 @@
                 "koji-build": {
                     "distro": "centos-stream-8",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "centos-stream-8",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -216,12 +244,14 @@
                 "koji-build": {
                     "distro": "centos-stream-8",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "centos-stream-8",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -231,12 +261,14 @@
                 "koji-build": {
                     "distro": "centos-stream-9",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "centos-stream-9",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         },
@@ -246,12 +278,14 @@
                 "koji-build": {
                     "distro": "centos-stream-9",
                     "arch": "x86_64",
-                    "trigger": "build"
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
                     "distro": "centos-stream-9",
                     "arch": "x86_64",
-                    "trigger": "commit"
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
                 }
             }
         }
