@@ -171,16 +171,16 @@
             }
         },
         "f41": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-41",
             "tmt_context": {
                 "koji-build": {
-                    "distro": "fedora-rawhide",
+                    "distro": "fedora-41",
                     "arch": "x86_64",
                     "trigger": "build",
                     "initiator": "fedora-ci"
                 },
                 "fedora-dist-git": {
-                    "distro": "fedora-rawhide",
+                    "distro": "fedora-41",
                     "arch": "x86_64",
                     "trigger": "commit",
                     "initiator": "fedora-ci"
