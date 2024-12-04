@@ -288,6 +288,23 @@
                     "initiator": "fedora-ci"
                 }
             }
+        },
+        "epel10": {
+            "compose": "CentOS-Stream-10",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "centos-stream-10",
+                    "arch": "x86_64",
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
+                },
+                "fedora-dist-git": {
+                    "distro": "centos-stream-10",
+                    "arch": "x86_64",
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
+                }
+            }
         }
     }
 }
