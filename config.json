@@ -191,6 +191,23 @@
             "compose": "Fedora-Rawhide",
             "tmt_context": {
                 "koji-build": {
+                    "distro": "fedora-42",
+                    "arch": "x86_64",
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-42",
+                    "arch": "x86_64",
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
+                }
+            }
+        },
+        "f43": {
+            "compose": "Fedora-Rawhide",
+            "tmt_context": {
+                "koji-build": {
                     "distro": "fedora-rawhide",
                     "arch": "x86_64",
                     "trigger": "build",
