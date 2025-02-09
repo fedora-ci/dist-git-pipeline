@@ -188,7 +188,7 @@
             }
         },
         "f42": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-42",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-42",
