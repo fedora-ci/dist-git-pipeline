@@ -205,6 +205,23 @@
             }
         },
         "f43": {
+            "compose": "Fedora-43",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "fedora-43",
+                    "arch": "x86_64",
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-43",
+                    "arch": "x86_64",
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
+                }
+            }
+        },
+        "f44": {
             "compose": "Fedora-Rawhide",
             "tmt_context": {
                 "koji-build": {
