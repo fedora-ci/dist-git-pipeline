@@ -238,6 +238,23 @@
                 }
             }
         },
+        "eln": {
+            "compose": "Fedora-eln",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "fedora-eln",
+                    "arch": "x86_64",
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-eln",
+                    "arch": "x86_64",
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
+                }
+            }
+        },
         "epel7": {
             "compose": "CentOS-7",
             "tmt_context": {
