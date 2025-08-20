@@ -205,7 +205,7 @@
             }
         },
         "f43": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-43",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-43",
