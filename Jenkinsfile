@@ -89,6 +89,13 @@ pipeline {
                     if (!repoTests) {
                         abort("No dist-git tests (STI/TMT) were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
+                    if (repoTests['type'] == 'sti'){
+                    	// Check for STI disablement
+      					// Currently (F43 development cycle) it means only run on F41 and F42
+                    	if (not (params.TEST_PROFILE == 'f41' || params.TEST_PROFILE == 'f42')){
+							abort("STI tests were disabled")
+						}
+					}
                     if (!testPlan) {
                         // it doesn't make sense to report results separately if we are running only one test plan
                         reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
