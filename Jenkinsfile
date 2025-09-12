@@ -92,7 +92,7 @@ pipeline {
                     if (repoTests['type'] == 'sti'){
                     	// Check for STI disablement
       					// Currently (F43 development cycle) it means only run on F41 and F42
-                    	if (not (params.TEST_PROFILE == 'f41' || params.TEST_PROFILE == 'f42')){
+                    	if (!(params.TEST_PROFILE == 'f41' || params.TEST_PROFILE == 'f42')){
 							abort("STI tests were disabled")
 						}
 					}
