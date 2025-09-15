@@ -78,7 +78,7 @@ class CustomJSONEncoder(json.JSONEncoder):
         return super().default(o)
 
 
-bodhi_updates: dict[str, UpdateInfo | dict[str, typing.Any]]
+bodhi_updates: dict[str, UpdateInfo]
 curr_page: int = 1
 total_pages: int | None = None
 expected_updates: int | None = None
@@ -94,9 +94,16 @@ bodhi_client = BodhiClient()
 CACHE_FILE.touch(exist_ok=True)
 with CACHE_FILE.open("rt") as f:
     try:
-        bodhi_updates = json.load(f)
+        bodhi_updates_dict = json.load(f)
     except json.JSONDecodeError:
-        bodhi_updates = {}
+        bodhi_updates_dict = {}
+bodhi_updates = {
+    updateid: UpdateInfo(
+        msg=info["msg"],
+        state=CacheState[info["state"].removeprefix("CacheState.")],
+    )
+    for updateid, info in bodhi_updates_dict.items()
+}
 
 
 def save_bodhi_update(msg: dict[str, typing.Any]) -> None:
@@ -105,9 +112,8 @@ def save_bodhi_update(msg: dict[str, typing.Any]) -> None:
     cached_state = CacheState.UNKNOWN
     if updateid in bodhi_updates:
         cached_update = bodhi_updates[updateid]
-        if isinstance(cached_update, dict):
-            cached_msg = cached_update["msg"]
-            cached_state = CacheState[cached_update["state"].removeprefix("CacheState.")]
+        cached_msg = cached_update.msg
+        cached_state = cached_update.state
     bodhi_updates[updateid] = UpdateInfo(
         msg=cached_msg,
         state=cached_state,
