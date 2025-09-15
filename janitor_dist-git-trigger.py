@@ -12,6 +12,7 @@ import enum
 import json
 import logging
 import typing
+import os
 from pathlib import Path
 
 from bodhi.client.bindings import BodhiClient
