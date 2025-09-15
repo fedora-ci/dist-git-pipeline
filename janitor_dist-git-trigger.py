@@ -5,6 +5,9 @@
 #   "bodhi-client",
 # ]
 # ///
+"""
+Re-trigger dist-git-trigger jobs that were missed by rabbitmq.
+"""
 
 import dataclasses
 import datetime
@@ -25,16 +28,22 @@ from urllib3.util import Retry
 logging.basicConfig(level="INFO")
 logger = logging.getLogger(Path(__file__).name)
 
+# Configurable variables
 dry_run: bool = False
-recheck_datagrepper: bool = False
+"""Whether to submit Jenkins jobs or just print the CI_MESSAGE."""
+recheck_datagrepper: bool = True
+"""Check datagrepper history."""
+search_window = datetime.timedelta(minutes=10)
+"""How far back should we check datagrepper history."""
+search_delay = datetime.timedelta(minutes=5)
+"""From when should we check datagrepper."""
 
+# Constants
 JENKINS_URL: str = "https://osci-jenkins-1.ci.fedoraproject.org/job/fedora-ci/job/dist-git-trigger/job/master/buildWithParameters"
 DATAGREPPER_URL: str = "https://apps.fedoraproject.org/datagrepper/v2/search"
 RABBITMQ_TOPIC: str = (
     "org.fedoraproject.prod.bodhi.update.status.testing.koji-build-group.build.complete"
 )
-SEARCH_WINDOW = datetime.timedelta(minutes=10)
-SEARCH_DELAY = datetime.timedelta(minutes=5)
 # Format: `{user}:{auth_token}`
 JENKINS_TOKEN = os.environ.get("JENKINS_TOKEN", None)
 
@@ -74,8 +83,8 @@ curr_page: int = 1
 total_pages: int | None = None
 expected_updates: int | None = None
 
-search_end = datetime.datetime.now(datetime.UTC) - SEARCH_DELAY
-search_start = search_end - SEARCH_WINDOW
+search_end = datetime.datetime.now(datetime.UTC) - search_delay
+search_start = search_end - search_window
 
 session = requests.Session()
 retries = Retry(total=3, backoff_factor=1)
@@ -152,7 +161,7 @@ if recheck_datagrepper:
         json.dump(bodhi_updates, f, cls=CustomJSONEncoder)
 
 if not bodhi_updates:
-    logger.info(f"No new updates were made in the past {SEARCH_WINDOW}")
+    logger.info(f"No new updates were made in the past {search_window}")
     exit(0)
 
 for updateid, update_info in bodhi_updates.items():
