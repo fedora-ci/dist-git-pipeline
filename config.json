@@ -238,6 +238,23 @@
                 }
             }
         },
+        "f45": {
+            "compose": "Fedora-Rawhide",
+            "tmt_context": {
+                "koji-build": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "build",
+                    "initiator": "fedora-ci"
+                },
+                "fedora-dist-git": {
+                    "distro": "fedora-rawhide",
+                    "arch": "x86_64",
+                    "trigger": "commit",
+                    "initiator": "fedora-ci"
+                }
+            }
+        },
         "eln": {
             "compose": "Fedora-eln",
             "tmt_context": {
