@@ -222,7 +222,7 @@
             }
         },
         "f44": {
-            "compose": "Fedora-Rawhide",
+            "compose": "Fedora-44",
             "tmt_context": {
                 "koji-build": {
                     "distro": "fedora-rawhide",
