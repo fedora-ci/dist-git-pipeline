@@ -98,7 +98,7 @@ pipeline {
 					}
                     if (!testPlan) {
                         // it doesn't make sense to report results separately if we are running only one test plan
-                        reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
+                        reportSeparately = repoTests.plans.size() > 0
                     } else {
                         pipelineMetadata['testType'] = testPlan
                     }
