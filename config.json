@@ -12,10 +12,6 @@
             "compose": "Fedora-44",
             "distro": "fedora-44"
         },
-        "f45": {
-            "compose": "Fedora-Rawhide",
-            "distro": "fedora-rawhide"
-        },
         "rawhide": {
             "compose": "Fedora-Rawhide",
             "distro": "fedora-rawhide"

@@ -19,8 +19,6 @@ def pipelineMetadata = [
         email: 'ci@lists.fedoraproject.org'
     ],
 ]
-def artifactId
-def additionalArtifactIds
 def testingFarmRequestId
 def testingFarmResult
 def config
@@ -29,15 +27,11 @@ def runUrl
 
 def repoUrlAndRef
 def repoTests
-def testPlan
 def tmtContext = [
     initiator: 'fedora-ci',
     trigger: 'build',
     arch: 'x86_64',
 ]
-def profile
-
-def reportSeparately = false
 
 
 pipeline {
@@ -57,7 +51,6 @@ pipeline {
     parameters {
         string(name: 'ARTIFACT_ID', defaultValue: '', trim: true, description: '"koji-build:&lt;taskId&gt;" for Koji builds; Example: koji-build:46436038')
         string(name: 'ADDITIONAL_ARTIFACT_IDS', defaultValue: '', trim: true, description: 'A comma-separated list of additional ARTIFACT_IDs')
-        string(name: 'TEST_PROFILE', defaultValue: env.FEDORA_CI_RAWHIDE_RELEASE_ID, trim: true, description: "A name of the test profile to use; Example: ${env.FEDORA_CI_RAWHIDE_RELEASE_ID}")
         string(name: 'DIST_GIT_BRANCH', defaultValue: '', trim: true, description: "Dist-git branch associated with the provided ARTIFACT_ID")
         string(name: 'TEST_REPO_URL', defaultValue: '', trim: true, description: '(optional) URL to the repository containing tests; followed by "#&lt;ref&gt;", where &lt;ref&gt; is a commit hash; Example: https://src.fedoraproject.org/tests/selinux#ff0784e36758f2fdce3201d907855b0dd74064f9')
         string(name: 'TEST_PLAN', defaultValue: '', trim: true, description: '(optional) name of the test plan to run; Example: /plans/regression')
@@ -74,28 +67,19 @@ pipeline {
             }
             steps {
                 script {
-                    // TODO: Cleanup when `TEST_PROFILE` is dropped
-                    if (params.DIST_GIT_BRANCH) {
-                        profile = params.DIST_GIT_BRANCH
-                    } else {
-                        profile = params.TEST_PROFILE
-                    }
-                    artifactId = params.ARTIFACT_ID
-                    additionalArtifactIds = params.ADDITIONAL_ARTIFACT_IDS
-                    setBuildNameFromArtifactId(artifactId: artifactId, profile: profile)
-                    testPlan = params.TEST_PLAN
+                    setBuildNameFromArtifactId(artifactId: params.ARTIFACT_ID, profile: params.DIST_GIT_BRANCH)
 
                     checkout scm
-                    config = loadConfig(profile: profile)
+                    config = loadConfig(profile: params.DIST_GIT_BRANCH)
                     tmtContext['distro'] = config['distro']
                     tmtContext['dist-git-branch'] = params.DIST_GIT_BRANCH
 
-                    if (!artifactId) {
+                    if (!params.ARTIFACT_ID) {
                         abort('ARTIFACT_ID is missing')
                     }
 
                     if (!TEST_REPO_URL) {
-                        repoUrlAndRef = getRepoUrlAndRefFromTaskId("${getIdFromArtifactId(artifactId: artifactId)}")
+                        repoUrlAndRef = getRepoUrlAndRefFromTaskId("${getIdFromArtifactId(artifactId: params.ARTIFACT_ID)}")
                     } else {
                         repoUrlAndRef = [url: TEST_REPO_URL.split('#')[0], ref: TEST_REPO_URL.split('#')[1]]
                     }
@@ -107,15 +91,16 @@ pipeline {
                     if (repoTests['type'] == 'sti'){
                     	// Check for STI disablement
       					// Currently (F43 development cycle) it means only run on F41 and F42
-                    	if (!(params.TEST_PROFILE == 'f41' || params.TEST_PROFILE == 'f42')){
+                    	if (!params.DIST_GIT_BRANCH == 'f42'){
 							abort("STI tests were disabled")
 						}
 					}
-                    if (!testPlan) {
+					def reportSeparately = false
+                    if (!params.TEST_PLAN) {
                         // it doesn't make sense to report results separately if we are running only one test plan
                         reportSeparately = repoTests.ciConfig.get('resultsdb-testcase') == 'separate'
                     } else {
-                        pipelineMetadata['testType'] = testPlan
+                        pipelineMetadata['testType'] = params.TEST_PLAN
                     }
                     if (reportSeparately && repoTests['type'] == 'fmf') {
                         // we want to report results separately, so we will just run this job for each test plan individually
@@ -126,7 +111,6 @@ pipeline {
                                 parameters: [
                                     string(name: 'ARTIFACT_ID', value: params.ARTIFACT_ID),
                                     string(name: 'ADDITIONAL_ARTIFACT_IDS', value: params.ADDITIONAL_ARTIFACT_IDS),
-                                    string(name: 'TEST_PROFILE', value: params.TEST_PROFILE),
                                     string(name: 'DIST_GIT_BRANCH', value: params.DIST_GIT_BRANCH),
                                     string(name: 'TEST_REPO_URL', value: params.TEST_REPO_URL),
                                     string(name: 'TEST_PLAN', value: plan),
@@ -138,7 +122,7 @@ pipeline {
                 }
                 sendMessage(
                     type: 'queued',
-                    artifactId: artifactId,
+                    artifactId: params.ARTIFACT_ID,
                     pipelineMetadata: pipelineMetadata,
                     dryRun: isPullRequest()
                 )
@@ -152,7 +136,7 @@ pipeline {
             steps {
                 script {
                     def artifacts = []
-                    getIdFromArtifactId(artifactId: artifactId, additionalArtifactIds: additionalArtifactIds).split(',').each { taskId ->
+                    getIdFromArtifactId(artifactId: params.ARTIFACT_ID, additionalArtifactIds: params.ADDITIONAL_ARTIFACT_IDS).split(',').each { taskId ->
                         if (taskId) {
                             artifacts.add([id: "${taskId}", type: "fedora-koji-build"])
                         }
@@ -165,7 +149,7 @@ pipeline {
                             [
                                 arch: "x86_64",
                                 variables: [
-                                    KOJI_TASK_ID: "${getIdFromArtifactId(artifactId: artifactId)}"
+                                    KOJI_TASK_ID: "${getIdFromArtifactId(artifactId: params.ARTIFACT_ID)}"
                                 ],
                                 os: [ compose: "${config.compose}" ],
                                 artifacts: artifacts
@@ -183,8 +167,8 @@ pipeline {
                         requestPayload['environments'][0]['tmt'] = [
                             context: tmtContext
                         ]
-                        if (testPlan) {
-                            requestPayload['test']['fmf']['name'] = testPlan
+                        if (params.TEST_PLAN) {
+                            requestPayload['test']['fmf']['name'] = params.TEST_PLAN
                         }
                     }
 
@@ -196,7 +180,7 @@ pipeline {
                 }
                 sendMessage(
                     type: 'running',
-                    artifactId: artifactId,
+                    artifactId: params.ARTIFACT_ID,
                     pipelineMetadata: pipelineMetadata,
                     dryRun: isPullRequest()
                 )
@@ -225,7 +209,7 @@ pipeline {
                 if (isTimeoutAborted(timeout: env.DEFAULT_PIPELINE_TIMEOUT_MINUTES, unit: 'MINUTES')) {
                     sendMessage(
                         type: 'error',
-                        artifactId: artifactId,
+                        artifactId: params.ARTIFACT_ID,
                         errorReason: 'Timeout has been exceeded, pipeline aborted.',
                         pipelineMetadata: pipelineMetadata,
                         dryRun: isPullRequest()
@@ -237,7 +221,7 @@ pipeline {
             script {
                 sendMessage(
                     type: 'complete',
-                    artifactId: artifactId,
+                    artifactId: params.ARTIFACT_ID,
                     pipelineMetadata: pipelineMetadata,
                     runUrl: runUrl,
                     dryRun: isPullRequest()
@@ -247,7 +231,7 @@ pipeline {
         failure {
             sendMessage(
                 type: 'error',
-                artifactId: artifactId,
+                artifactId: params.ARTIFACT_ID,
                 pipelineMetadata: pipelineMetadata,
                 dryRun: isPullRequest()
             )
@@ -256,7 +240,7 @@ pipeline {
             script {
                 sendMessage(
                     type: 'complete',
-                    artifactId: artifactId,
+                    artifactId: params.ARTIFACT_ID,
                     pipelineMetadata: pipelineMetadata,
                     runUrl: runUrl,
                     dryRun: isPullRequest()
