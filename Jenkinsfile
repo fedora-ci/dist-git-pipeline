@@ -35,7 +35,6 @@ def tmtContext = [
     trigger: 'build',
     arch: 'x86_64',
 ]
-def profile
 
 def reportSeparately = false
 
@@ -57,7 +56,6 @@ pipeline {
     parameters {
         string(name: 'ARTIFACT_ID', defaultValue: '', trim: true, description: '"koji-build:&lt;taskId&gt;" for Koji builds; Example: koji-build:46436038')
         string(name: 'ADDITIONAL_ARTIFACT_IDS', defaultValue: '', trim: true, description: 'A comma-separated list of additional ARTIFACT_IDs')
-        string(name: 'TEST_PROFILE', defaultValue: env.FEDORA_CI_RAWHIDE_RELEASE_ID, trim: true, description: "A name of the test profile to use; Example: ${env.FEDORA_CI_RAWHIDE_RELEASE_ID}")
         string(name: 'DIST_GIT_BRANCH', defaultValue: '', trim: true, description: "Dist-git branch associated with the provided ARTIFACT_ID")
         string(name: 'TEST_REPO_URL', defaultValue: '', trim: true, description: '(optional) URL to the repository containing tests; followed by "#&lt;ref&gt;", where &lt;ref&gt; is a commit hash; Example: https://src.fedoraproject.org/tests/selinux#ff0784e36758f2fdce3201d907855b0dd74064f9')
         string(name: 'TEST_PLAN', defaultValue: '', trim: true, description: '(optional) name of the test plan to run; Example: /plans/regression')
@@ -74,19 +72,13 @@ pipeline {
             }
             steps {
                 script {
-                    // TODO: Cleanup when `TEST_PROFILE` is dropped
-                    if (params.DIST_GIT_BRANCH) {
-                        profile = params.DIST_GIT_BRANCH
-                    } else {
-                        profile = params.TEST_PROFILE
-                    }
                     artifactId = params.ARTIFACT_ID
                     additionalArtifactIds = params.ADDITIONAL_ARTIFACT_IDS
-                    setBuildNameFromArtifactId(artifactId: artifactId, profile: profile)
+                    setBuildNameFromArtifactId(artifactId: artifactId, profile: params.DIST_GIT_BRANCH)
                     testPlan = params.TEST_PLAN
 
                     checkout scm
-                    config = loadConfig(profile: profile)
+                    config = loadConfig(profile: params.DIST_GIT_BRANCH)
                     tmtContext['distro'] = config['distro']
                     tmtContext['dist-git-branch'] = params.DIST_GIT_BRANCH
 
@@ -107,7 +99,7 @@ pipeline {
                     if (repoTests['type'] == 'sti'){
                     	// Check for STI disablement
       					// Currently (F43 development cycle) it means only run on F41 and F42
-                    	if (!(params.TEST_PROFILE == 'f41' || params.TEST_PROFILE == 'f42')){
+                    	if (!(params.DIST_GIT_BRANCH == 'f41' || params.DIST_GIT_BRANCH == 'f42')){
 							abort("STI tests were disabled")
 						}
 					}
@@ -126,7 +118,6 @@ pipeline {
                                 parameters: [
                                     string(name: 'ARTIFACT_ID', value: params.ARTIFACT_ID),
                                     string(name: 'ADDITIONAL_ARTIFACT_IDS', value: params.ADDITIONAL_ARTIFACT_IDS),
-                                    string(name: 'TEST_PROFILE', value: params.TEST_PROFILE),
                                     string(name: 'DIST_GIT_BRANCH', value: params.DIST_GIT_BRANCH),
                                     string(name: 'TEST_REPO_URL', value: params.TEST_REPO_URL),
                                     string(name: 'TEST_PLAN', value: plan),
