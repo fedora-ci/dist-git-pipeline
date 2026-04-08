@@ -97,8 +97,9 @@ pipeline {
 						}
 					}
                     if (!testPlan) {
-                        // it doesn't make sense to report results separately if we are running only one test plan
-                        reportSeparately = repoTests.plans.size() > 0
+                        if (repoTests.plans) {
+                            reportSeparately = repoTests.plans.size() > 0
+                        }
                     } else {
                         pipelineMetadata['testType'] = testPlan
                     }
