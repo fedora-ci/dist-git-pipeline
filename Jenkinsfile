@@ -85,16 +85,9 @@ pipeline {
                     }
                     repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'], context: tmtContext)
 
-                    if (!repoTests) {
-                        abort("No dist-git tests (STI/TMT) were found in the repository ${repoUrlAndRef[0]}, skipping...")
+                    if (!repoTests || repoTests['type'] != 'tmt') {
+                        abort("No tmt tests were found in the repository ${repoUrlAndRef[0]}, skipping...")
                     }
-                    if (repoTests['type'] == 'sti'){
-                    	// Check for STI disablement
-      					// Currently (F43 development cycle) it means only run on F41 and F42
-                    	if (!params.DIST_GIT_BRANCH == 'f42'){
-							abort("STI tests were disabled")
-						}
-					}
 					def reportSeparately = false
                     if (!params.TEST_PLAN) {
                         if (repoTests.plans) {
