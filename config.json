@@ -1,9 +1,5 @@
 {
     "profiles": {
-        "f42": {
-            "compose": "Fedora-42",
-            "distro": "fedora-42"
-        },
         "f43": {
             "compose": "Fedora-43",
             "distro": "fedora-43"
@@ -11,10 +7,6 @@
         "f44": {
             "compose": "Fedora-44",
             "distro": "fedora-44"
-        },
-        "f45": {
-            "compose": "Fedora-Rawhide",
-            "distro": "fedora-rawhide"
         },
         "rawhide": {
             "compose": "Fedora-Rawhide",
