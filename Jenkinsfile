@@ -85,8 +85,8 @@ pipeline {
                     }
                     repoTests = repoHasTests(repoUrl: repoUrlAndRef['url'], ref: repoUrlAndRef['ref'], context: tmtContext)
 
-                    if (!repoTests || repoTests['type'] != 'tmt') {
-                        abort("No tmt tests were found in the repository ${repoUrlAndRef[0]}, skipping...")
+                    if (!repoTests || repoTests['type'] != 'fmf') {
+                        abort("No tmt tests were found in the repository, skipping...")
                     }
 					def reportSeparately = false
                     if (!params.TEST_PLAN) {
@@ -96,7 +96,7 @@ pipeline {
                     } else {
                         pipelineMetadata['testType'] = params.TEST_PLAN
                     }
-                    if (reportSeparately && repoTests['type'] == 'fmf') {
+                    if (reportSeparately) {
                         // we want to report results separately, so we will just run this job for each test plan individually
                         repoTests['plans'].each { plan ->
                             build(
