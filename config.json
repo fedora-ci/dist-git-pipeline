@@ -43,6 +43,10 @@
         "epel10.2": {
             "compose": "CentOS-Stream-10",
             "distro": "centos-stream-10"
+        },
+        "epel10.3": {
+            "compose": "CentOS-Stream-10",
+            "distro": "centos-stream-10"
         }
     }
 }
